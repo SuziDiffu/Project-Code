@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Registration</title>
+    <title>Teacher Registration Form</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -109,30 +109,75 @@
     </div>
     <div class="main">
         <h1>Teacher Registration</h1>
-        <form action="teacher_register.php" method="post">
+        
+        <?php
+        require_once 'database/db.php';
+        use Database\Database; // Use the Database namespace
+
+        // Instantiating the Database class
+        $db = new Database();
+        $connection = $db->connection; // Access the database connection
+        session_start();
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $first_name = $_POST['first_name'];
+            $last_name = $_POST['last_name'];
+            $subject = $_POST['subject'];
+            $email = $_POST['email'];
+            $phone_no = $_POST['phone_no'];
+            $password = $_POST['password'];
+            $confirm_password = $_POST['confirm_password'];
+            $payment_method = $_POST['payment_method'];
+
+            if ($password !== $confirm_password) {
+                echo "<p style='color:red;'>Passwords do not match.</p>";
+            } else {
+                $sql = "INSERT INTO tutors (first_name, last_name, subject, email, phone_no, password, payment_method) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $connection->prepare($sql);
+                $stmt->bind_param('sssssss', $first_name, $last_name, $subject, $email, $phone_no, $password, $payment_method);
+
+                if ($stmt->execute()) {
+                    echo "<p style='color:green;'>Registration successful. You can now log in.</p>";
+                    header("Location: login.php");
+                    exit; // Stop the script after redirection
+                } else {
+                    echo "<p style='color:red;'>Error: " . $stmt->error . "</p>";
+                }
+            }
+        }
+        ?>
+
+        <form action="teacherRegistration.php" method="post">
             <label for="first_name">First Name*</label>
             <input type="text" id="first_name" name="first_name" required>
-            
+
             <label for="last_name">Last Name*</label>
             <input type="text" id="last_name" name="last_name" required>
+            
+            <label for="subject">Subject*</label>
+            <input type="text" id="subject" name="subject" required>
             
             <label for="email">Email*</label>
             <input type="email" id="email" name="email" required>
             
-            <label for="subject">Subject You Teach*</label>
-            <input type="text" id="subject" name="subject" required>
+            <label for="phone_no">Phone Number*</label>
+            <input type="text" id="phone_no" name="phone_no" required>
+            
             <label for="password">Password*</label>
-            <input type="password" id="password" name="password" required><!--type=password dispalys the values that have been input as dots instead of text--->
+            <input type="password" id="password" name="password" required>
             
             <label for="confirm_password">Confirm Password*</label>
             <input type="password" id="confirm_password" name="confirm_password" required>
+            
+            <label for="payment_method">Payment Method*</label>
+            <input type="text" id="payment_method" name="payment_method" required>
             
             <button type="submit" class="button">Register</button>
         </form>
     </div>
     <footer>
         <p>TutorPal, Copyright &copy;
-           <?php echo date('d, m, Y'); ?>
+           <?php echo date('d-m-Y'); ?>
         </p>
     </footer>   
 </body>

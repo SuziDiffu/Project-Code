@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user = $result_student->fetch_assoc();
         $_SESSION['user_id'] = $user['student_id'];
         $_SESSION['user_role'] = 'student';
-        header("Location: studentDashboard.php");
+        header("Location: user/studentDashboard.php");
     } else {
         echo "Invalid email or password";
     }

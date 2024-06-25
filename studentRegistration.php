@@ -109,7 +109,43 @@
     </div>
     <div class="main">
         <h1>Student Registration</h1>
-        <form action="register.php" method="post">
+        
+        <?php
+        require_once 'database/db.php';
+        use Database\Database; // Use the Database namespace
+
+        // Instantiating the Database class
+        $db = new Database();
+        $connection = $db->connection; // Access the database connection
+        session_start();
+    
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $first_name = $_POST['first_name'];
+            $last_name = $_POST['last_name'];
+            $email = $_POST['email'];
+            $grade = $_POST['grade'];
+            $password = $_POST['password'];
+            $confirm_password = $_POST['confirm_password'];
+
+            if ($password !== $confirm_password) {
+                echo "<p style='color:red;'>Passwords do not match.</p>";
+            } else {
+                $sql = "INSERT INTO students (first_name, last_name, email, grade, password) VALUES (?, ?, ?, ?, ?)";
+                $stmt = $connection->prepare($sql);
+                $stmt->bind_param('sssss', $first_name, $last_name, $email, $grade, $password);
+
+                if ($stmt->execute()) {
+                    echo "<p style='color:green;'>Registration successful. You can now log in.</p>";
+                    header("Location: login.php");
+                } else {
+                    echo "<p style='color:red;'>Error: " . $stmt->error . "</p>";
+                }
+            }
+        }
+        ?>
+
+        <form action="studentRegistration.php" method="post">
             <label for="first_name">First Name*</label>
             <input type="text" id="first_name" name="first_name" required>
             
@@ -123,7 +159,7 @@
             <input type="text" id="grade" name="grade" required>
             
             <label for="password">Password*</label>
-            <input type="password" id="password" name="password" required><!--type=password dispalys the values that have been input as dots instead of text--->
+            <input type="password" id="password" name="password" required>
             
             <label for="confirm_password">Confirm Password*</label>
             <input type="password" id="confirm_password" name="confirm_password" required>
