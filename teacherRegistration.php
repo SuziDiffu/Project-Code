@@ -132,9 +132,12 @@
             if ($password !== $confirm_password) {
                 echo "<p style='color:red;'>Passwords do not match.</p>";
             } else {
+                // Hash the password before storing
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
                 $sql = "INSERT INTO tutors (first_name, last_name, subject, email, phone_no, password, payment_method) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $stmt = $connection->prepare($sql);
-                $stmt->bind_param('sssssss', $first_name, $last_name, $subject, $email, $phone_no, $password, $payment_method);
+                $stmt->bind_param('sssssss', $first_name, $last_name, $subject, $email, $phone_no, $hashed_password, $payment_method);
 
                 if ($stmt->execute()) {
                     echo "<p style='color:green;'>Registration successful. You can now log in.</p>";

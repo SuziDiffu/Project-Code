@@ -6,36 +6,47 @@ use Database\Database; // Use the Database namespace
 
 // Instantiating the Database class
 $db = new Database();
-$connection = $db->connection; // Access the database connection then;
-/*1.check if form was submitted via post 2.retrieve email and password from post data
-3.Prepare and Execute SQL Query for Tutors then students:bind_param method binds the email and password to the query,
- and execute runs the query.4.Check Query Results and Set Session Variables: **/
+$connection = $db->connection; // Access the database connection
+
+// 1. Check if form was submitted via POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') { 
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $sql_tutor = "SELECT * FROM tutors WHERE email = ? AND password = ?";
+    // 2. Prepare and Execute SQL Query for Tutors
+    $sql_tutor = "SELECT * FROM tutors WHERE email = ?";
     $stmt_tutor = $connection->prepare($sql_tutor);
-    $stmt_tutor->bind_param('ss', $email, $password);
+    $stmt_tutor->bind_param('s', $email);
     $stmt_tutor->execute();
     $result_tutor = $stmt_tutor->get_result();
-
-    $sql_student = "SELECT * FROM students WHERE email = ? AND password = ?";
+    
+    // 3. Prepare and Execute SQL Query for Students
+    $sql_student = "SELECT * FROM students WHERE email = ?";
     $stmt_student = $connection->prepare($sql_student);
-    $stmt_student->bind_param('ss', $email, $password);
+    $stmt_student->bind_param('s', $email);
     $stmt_student->execute();
     $result_student = $stmt_student->get_result();
 
     if ($result_tutor->num_rows > 0) {
         $user = $result_tutor->fetch_assoc();
-        $_SESSION['user_id'] = $user['tutor_id'];
-        $_SESSION['user_role'] = 'tutor';
-        header("Location: user/teacherDashboard.php");
+        if (password_verify($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['tutor_id'];
+            $_SESSION['user_role'] = 'tutor';
+            header("Location: user/teacherDashboard.php");
+            exit;
+        } else {
+            echo "Invalid email or password";
+        }
     } elseif ($result_student->num_rows > 0) {
         $user = $result_student->fetch_assoc();
-        $_SESSION['user_id'] = $user['student_id'];
-        $_SESSION['user_role'] = 'student';
-        header("Location: user/studentDashboard.php");
+        if (password_verify($password, $user['password'])) {
+            $_SESSION['user_id'] = $user['student_id'];
+            $_SESSION['user_role'] = 'student';
+            header("Location: user/studentDashboard.php");
+            exit;
+        } else {
+            echo "Invalid email or password";
+        }
     } else {
         echo "Invalid email or password";
     }

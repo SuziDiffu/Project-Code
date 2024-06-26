@@ -131,9 +131,12 @@
             if ($password !== $confirm_password) {
                 echo "<p style='color:red;'>Passwords do not match.</p>";
             } else {
+                // Hash the password before storing
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
                 $sql = "INSERT INTO students (first_name, last_name, email, grade, password) VALUES (?, ?, ?, ?, ?)";
                 $stmt = $connection->prepare($sql);
-                $stmt->bind_param('sssss', $first_name, $last_name, $email, $grade, $password);
+                $stmt->bind_param('sssss', $first_name, $last_name, $email, $grade, $hashed_password);
 
                 if ($stmt->execute()) {
                     echo "<p style='color:green;'>Registration successful. You can now log in.</p>";
