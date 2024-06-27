@@ -154,7 +154,11 @@ if ($result->num_rows > 0) {
         <div class="content">
             <div class="button-group">
                 <a href="teacherDashboard.php">Homepage</a>
-                <a href="../logout.php">Logout</a>
+                <a href="postAssignment.php">Post Assignment</a>
+                <a href="viewSubmittedWork.php">View Submitted Work</a>
+                <a href="viewStudentRecords.php">View Student Records</a>
+                <a href="postMarks.php">Post Marks</a>
+                <a href="../login.php">Logout</a>
             </div>
             <div class="table-container">
                 <h1>Class Information</h1>
@@ -182,7 +186,7 @@ if ($result->num_rows > 0) {
         </div>
     </div>
     <footer>
-        <p>TutorPal, Copyright &copy; <?php echo date('Y'); ?></p>
+        <p>TutorPal, Copyright &copy; <?php echo date('d,m,Y'); ?></p>
     </footer>
 </body>
 </html>
