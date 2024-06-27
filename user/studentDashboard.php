@@ -68,21 +68,44 @@ $student = $result->fetch_assoc();
         .main {
             flex: 1;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            width: 100%;
+            justify-content: center;
             padding: 20px;
             box-sizing: border-box;
         }
-        h1 {
-            margin: 10px 0;
-            color: #333;
-            text-align: center;
+        .content {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            align-items: flex-start;
         }
-        .search-bar {
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-right: 20px;
+            width: 150px; /* Same width for all buttons */
+        }
+        .button-group a {
+            background: #007BFF;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            width: 70%; /* width of buttons*/
+            text-align: center; /* Center text */
+        }
+        .button-group a:hover {
+            background: #0056b3;
+        }
+        .profile-container {
+            display: flex;
+            flex-direction: column;
             width: 100%;
             max-width: 600px;
+        }
+        .search-bar {
             display: flex;
             margin-bottom: 20px;
         }
@@ -109,8 +132,6 @@ $student = $result->fetch_assoc();
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
             box-sizing: border-box;
             text-align: left;
         }
@@ -144,40 +165,47 @@ $student = $result->fetch_assoc();
 <body>
     <div class="header">
         <img src="logo.png" alt="Logo">
-        <a href="logout.php">Logout</a>
     </div>
     <div class="main">
-        <div class="search-bar">
-            <input type="text" placeholder="Search...">
-            <button>Search</button>
-        </div>
-        <h1>Student Dashboard</h1>
-        <div class="profile">
-            <div class="field">
-                <label>Student ID:</label>
-                <p><?php echo htmlspecialchars($student['student_id']); ?></p>
+        <div class="content">
+            <div class="button-group">
+                <a href="studentDashboard.php">Homepage</a>
+                <a href="classes.php">Classes</a>
+                <a href="logout.php">Logout</a>
             </div>
-            <div class="field">
-                <label>First Name:</label>
-                <p><?php echo htmlspecialchars($student['first_name']); ?></p>
-            </div>
-            <div class="field">
-                <label>Last Name:</label>
-                <p><?php echo htmlspecialchars($student['last_name']); ?></p>
-            </div>
-            <div class="field">
-                <label>Grade:</label>
-                <p><?php echo htmlspecialchars($student['grade']); ?></p>
-            </div>
-            <div class="field">
-                <label>Email:</label>
-                <p><?php echo htmlspecialchars($student['email']); ?></p>
+            <div class="profile-container">
+                <div class="search-bar" style="max-width: 600px;">
+                    <input type="text" placeholder="Search...">
+                    <button>Search</button>
+                </div>
+                <div class="profile">
+                    <div class="field">
+                        <label>Student ID:</label>
+                        <p><?php echo htmlspecialchars($student['student_id']); ?></p>
+                    </div>
+                    <div class="field">
+                        <label>First Name:</label>
+                        <p><?php echo htmlspecialchars($student['first_name']); ?></p>
+                    </div>
+                    <div class="field">
+                        <label>Last Name:</label>
+                        <p><?php echo htmlspecialchars($student['last_name']); ?></p>
+                    </div>
+                    <div class="field">
+                        <label>Grade:</label>
+                        <p><?php echo htmlspecialchars($student['grade']); ?></p>
+                    </div>
+                    <div class="field">
+                        <label>Email:</label>
+                        <p><?php echo htmlspecialchars($student['email']); ?></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <footer>
         <p>TutorPal, Copyright &copy;
-           <?php echo date('Y'); ?>
+           <?php echo date('d,m,Y'); ?>
         </p>
     </footer>
 </body>
