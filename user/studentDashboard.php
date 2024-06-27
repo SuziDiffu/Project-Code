@@ -171,7 +171,7 @@ $student = $result->fetch_assoc();
             <div class="button-group">
                 <a href="studentDashboard.php">Homepage</a>
                 <a href="classes.php">Classes</a>
-                <a href="logout.php">Logout</a>
+                <a href="../login.php">Logout</a><!--this takes the user back to the login page of the website--->
             </div>
             <div class="profile-container">
                 <div class="search-bar" style="max-width: 600px;">
