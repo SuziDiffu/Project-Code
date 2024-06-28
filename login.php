@@ -176,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
     <footer>
         <p>TutorPal, Copyright &copy;
-           <?php echo date('Y'); ?>
+           <?php echo date('d,m,Y'); ?>
         </p>
     </footer>   
 </body>
