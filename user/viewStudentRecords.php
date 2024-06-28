@@ -36,6 +36,7 @@ if ($result_classes->num_rows > 0) {
 
 // Handle form submission to view student records
 $message = '';
+$students = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $class_id = $_POST['class_id'];
 
@@ -45,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt_students->execute();
     $result_students = $stmt_students->get_result();
 
-    $students = [];
     if ($result_students->num_rows > 0) {
         while ($row_student = $result_students->fetch_assoc()) {
             $students[] = $row_student;
@@ -63,68 +63,175 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Student Records</title>
     <style>
-        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: #f0f0f0;
+        }
+        .header {
+            width: 100%;
+            background: #1bafd4;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header img {
+            height: 50px;
+            width: auto;
+        }
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            border-radius: 5px;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .header a:hover {
+            background-color: #575757;
+        }
+        .main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            text-align: left;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #f4f4f4;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            color: white;
+        }
+        .message.error {
+            background: #dc3545;
+        }
+        footer {
+            background-color: #1bafd4;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            width: 100%;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <img src="logo.png" alt="Logo">
+        <div class="button-group">
+            <a href="ClassInformation.php">Back to Class Information</a>
+            <a href="../login.php">Logout</a>
+        </div>
     </div>
     <div class="main">
         <div class="content">
-            <div class="button-group">
-                <a href="teacherDashboard.php">Homepage</a>
-                <a href="createClass.php">Create Class</a>
-                <a href="../logout.php">Logout</a>
-            </div>
-            <div class="form-container">
-                <h1>View Student Records</h1>
-                <?php if (!empty($message)): ?>
-                    <p class="message error"><?php echo htmlspecialchars($message); ?></p>
-                <?php endif; ?>
-                <form method="POST" action="">
-                    <div class="field">
-                        <label for="class_id">Select Class:</label>
-                        <select id="class_id" name="class_id" required>
-                            <option value="">Select Class</option>
-                            <?php foreach ($classes as $class): ?>
-                                <option value="<?php echo htmlspecialchars($class['class_id']); ?>">
-                                    <?php echo htmlspecialchars($class['class_name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <button type="submit">View Student Records</button>
-                </form>
+            <h1>View Student Records</h1>
+            <?php if (!empty($message)): ?>
+                <p class="message error"><?php echo htmlspecialchars($message); ?></p>
+            <?php endif; ?>
+            <form method="POST" action="">
+                <div class="field">
+                    <label for="class_id">Select Class:</label>
+                    <select id="class_id" name="class_id" required>
+                        <option value="">Select Class</option>
+                        <?php foreach ($classes as $class): ?>
+                            <option value="<?php echo htmlspecialchars($class['class_id']); ?>">
+                                <?php echo htmlspecialchars($class['class_name']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <button type="submit">View Student Records</button>
+            </form>
 
-                <?php if (!empty($students)): ?>
-                    <h2>Student Records</h2>
-                    <table>
-                        <thead>
+            <?php if (!empty($students)): ?>
+                <h2>Student Records</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($students as $student): ?>
                             <tr>
-                                <th>Student ID</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email</th>
+                                <td><?php echo htmlspecialchars($student['student_id']); ?></td>
+                                <td><?php echo htmlspecialchars($student['first_name']); ?></td>
+                                <td><?php echo htmlspecialchars($student['last_name']); ?></td>
+                                <td><?php echo htmlspecialchars($student['email']); ?></td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($students as $student): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($student['student_id']); ?></td>
-                                    <td><?php echo htmlspecialchars($student['first_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($student['last_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($student['email']); ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                <?php endif; ?>
-            </div>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
         </div>
     </div>
     <footer>
-        <p>TutorPal, Copyright &copy; <?php echo date('d,m,Y'); ?></p>
+        <p>TutorPal, Copyright &copy; <?php echo date('Y'); ?></p>
     </footer>
 </body>
 </html>

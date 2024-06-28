@@ -186,6 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="header">
         <img src="logo.png" alt="Logo">
         <a href="classInformation.php">Back to Class Information</a>
+        <a href="../login.php">Logout</a>
     </div>
     <div class="main">
         <div class="content">

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../database/db.php'; // db.php is in a directory called database at the same level as postStudentMarks.php
+require '../database/db.php'; // db.php is in a directory called database at the same level as postMarks.php
 
 use Database\Database; // Use the Database namespace
 
@@ -38,18 +38,16 @@ if ($result_classes->num_rows > 0) {
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $class_id = $_POST['class_id'];
-    $marks = $_POST['marks'];
+    $marks = isset($_POST['marks']) ? $_POST['marks'] : [];
 
-    // Validate marks data (assuming marks are passed as an array)
-    // Example: $marks = ['student_id_1' => 85, 'student_id_2' => 92, ...]
-
-    // Prepare SQL statement to update student marks
-    $sql_update = "UPDATE students SET marks = ? WHERE student_id = ?";
-    $stmt_update = $connection->prepare($sql_update);
+    // Prepare SQL statement to insert student marks
+    $sql_insert = "INSERT INTO student_marks (student_id, class_id, marks) VALUES (?, ?, ?)
+                   ON DUPLICATE KEY UPDATE marks = VALUES(marks)";
+    $stmt_insert = $connection->prepare($sql_insert);
 
     foreach ($marks as $student_id => $mark) {
-        $stmt_update->bind_param('ii', $mark, $student_id);
-        $stmt_update->execute();
+        $stmt_insert->bind_param('iii', $student_id, $class_id, $mark);
+        $stmt_insert->execute();
     }
 
     $message = "Marks updated successfully.";
@@ -63,41 +61,151 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post Student Marks</title>
     <style>
-        /* CSS styles remain the same as in the previous example */
-        /* Ensure to include all necessary CSS styles for header, main content, form, tables, messages, etc. */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: #f0f0f0;
+        }
+        .header {
+            width: 100%;
+            background: #1bafd4;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header img {
+            height: 50px;
+            width: auto;
+        }
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            border-radius: 5px;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .header a:hover {
+            background-color: #575757;
+        }
+        .main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            text-align: left;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #f4f4f4;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            color: white;
+        }
+        .message.success {
+            background: #28a745;
+        }
+        .message.error {
+            background: #dc3545;
+        }
+        footer {
+            background-color: #1bafd4;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            width: 100%;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <img src="logo.png" alt="Logo">
+        <div class="button-group">
+            <a href="ClassInformation.php">Back to Class Information</a>
+            <a href="../login.php">Logout</a>
+        </div>
     </div>
     <div class="main">
         <div class="content">
-            <div class="button-group">
-                <a href="teacherDashboard.php">Homepage</a>
-                <a href="createClass.php">Create Class</a>
-                <a href="../logout.php">Logout</a>
-            </div>
-            <div class="form-container">
-                <h1>Post Student Marks</h1>
-                <?php if (!empty($message)): ?>
-                    <p class="message success"><?php echo htmlspecialchars($message); ?></p>
-                <?php endif; ?>
-                <form method="POST" action="">
-                    <div class="field">
-                        <label for="class_id">Select Class:</label>
-                        <select id="class_id" name="class_id" required>
-                            <option value="">Select Class</option>
-                            <?php foreach ($classes as $class): ?>
-                                <option value="<?php echo htmlspecialchars($class['class_id']); ?>">
-                                    <?php echo htmlspecialchars($class['class_name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label for="marks">Enter Marks:</label>
-                        <!-- Assuming marks are entered for each student in a text input -->
+            <h1>Post Student Marks</h1>
+            <?php if (!empty($message)): ?>
+                <p class="message success"><?php echo htmlspecialchars($message); ?></p>
+            <?php endif; ?>
+            <form method="POST" action="">
+                <div class="field">
+                    <label for="class_id">Select Class:</label>
+                    <select id="class_id" name="class_id" required>
+                        <option value="">Select Class</option>
+                        <?php foreach ($classes as $class): ?>
+                            <option value="<?php echo htmlspecialchars($class['class_id']); ?>">
+                                <?php echo htmlspecialchars($class['class_name']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="marks">Enter Marks:</label>
+                    <?php if (!empty($classes)): ?>
                         <?php foreach ($classes as $class): ?>
                             <h2><?php echo htmlspecialchars($class['class_name']); ?></h2>
                             <div>
@@ -123,14 +231,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 ?>
                             </div>
                         <?php endforeach; ?>
-                    </div>
-                    <button type="submit">Post Marks</button>
-                </form>
-            </div>
+                    <?php endif; ?>
+                </div>
+                <button type="submit">Post Marks</button>
+            </form>
         </div>
     </div>
     <footer>
-        <p>TutorPal, Copyright &copy; <?php echo date('Y'); ?></p>
+        <p>TutorPal, Copyright &copy; <?php echo date('d,m,Y'); ?></p>
     </footer>
 </body>
 </html>
