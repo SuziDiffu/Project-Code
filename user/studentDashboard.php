@@ -10,18 +10,37 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'student') {
     exit;
 }
 
-// Instantiating the Database class
+// Instantiate the Database class
 $db = new Database();
 $connection = $db->connection; // Access the database connection
 
 // Retrieve student information from the database
 $student_id = $_SESSION['user_id'];
-$sql = "SELECT * FROM students WHERE student_id = ?";
-$stmt = $connection->prepare($sql);
-$stmt->bind_param('i', $student_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$student = $result->fetch_assoc();
+$sql_student = "SELECT * FROM students WHERE student_id = ?";
+$stmt_student = $connection->prepare($sql_student);
+$stmt_student->bind_param('i', $student_id);
+$stmt_student->execute();
+$result_student = $stmt_student->get_result();
+$student = $result_student->fetch_assoc();
+
+// Handle search form submission
+$search_results = [];
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
+    $search_term = '%' . $_POST['search'] . '%'; // Adding wildcard for partial matching
+
+    // Query to find tutors teaching the subject matching the search term
+    $sql_tutors = "SELECT * FROM tutors WHERE subject LIKE ?";
+    $stmt_tutors = $connection->prepare($sql_tutors);
+    $stmt_tutors->bind_param('s', $search_term);
+    $stmt_tutors->execute();
+    $result_tutors = $stmt_tutors->get_result();
+
+    if ($result_tutors->num_rows > 0) {
+        while ($row_tutor = $result_tutors->fetch_assoc()) {
+            $search_results[] = $row_tutor;
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -160,6 +179,24 @@ $student = $result->fetch_assoc();
             width: 100%;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
         }
+        .search-results {
+            margin-top: 20px;
+            max-width: 600px;
+        }
+        .search-results h2 {
+            margin-bottom: 10px;
+        }
+        .search-results ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .search-results li {
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -171,12 +208,14 @@ $student = $result->fetch_assoc();
             <div class="button-group">
                 <a href="studentDashboard.php">Homepage</a>
                 <a href="classes.php">Classes</a>
-                <a href="../login.php">Logout</a><!--this takes the user back to the login page of the website--->
+                <a href="../login.php">Logout</a>
             </div>
             <div class="profile-container">
-                <div class="search-bar" style="max-width: 600px;">
-                    <input type="text" placeholder="Search...">
-                    <button>Search</button>
+                <div class="search-bar">
+                    <form method="POST" action="">
+                        <input type="text" name="search" placeholder="Search...">
+                        <button type="submit">Search</button>
+                    </form>
                 </div>
                 <div class="profile">
                     <div class="field">
@@ -200,13 +239,27 @@ $student = $result->fetch_assoc();
                         <p><?php echo htmlspecialchars($student['email']); ?></p>
                     </div>
                 </div>
+                <?php if (!empty($search_results)): ?>
+                    <div class="search-results">
+                        <h2>Search Results</h2>
+                        <ul>
+                            <?php foreach ($search_results as $result): ?>
+                                <li>
+                                    <strong>Tutor ID:</strong> <?php echo htmlspecialchars($result['tutor_id']); ?><br>
+                                    <strong>First Name:</strong> <?php echo htmlspecialchars($result['first_name']); ?><br>
+                                    <strong>Last Name:</strong> <?php echo htmlspecialchars($result['last_name']); ?><br>
+                                    <strong>Subject:</strong> <?php echo htmlspecialchars($result['subject']); ?><br>
+                                    <strong>Email:</strong> <?php echo htmlspecialchars($result['email']); ?><br>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
     <footer>
-        <p>TutorPal, Copyright &copy;
-           <?php echo date('d,m,Y'); ?>
-        </p>
+        <p>TutorPal, Copyright &copy; <?php echo date('d,m,Y'); ?></p>
     </footer>
 </body>
 </html>
