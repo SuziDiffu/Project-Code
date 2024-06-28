@@ -208,6 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
             <div class="button-group">
                 <a href="studentDashboard.php">Homepage</a>
                 <a href="classes.php">Classes</a>
+                <a href="RequestTutor.php">Request Tutor</a>
                 <a href="../login.php">Logout</a>
             </div>
             <div class="profile-container">
