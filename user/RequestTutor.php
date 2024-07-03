@@ -20,13 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Retrieve form values
     $student_id = $_POST['student_id'];
     $tutor_id = $_POST['tutor_id'];
+    $class_id = $_POST['class_id'];
     $subject = $_POST['subject'];
     $date = $_POST['date'];
 
     // Insert the new request into the requests table
-    $sql_insert = "INSERT INTO requests (student_id, tutor_id, subject, date) VALUES (?, ?, ?, ?)";
+    $sql_insert = "INSERT INTO requests (student_id, tutor_id,class_id, subject, date) VALUES (?, ?, ?, ?,?)";
     $stmt_insert = $connection->prepare($sql_insert);
-    $stmt_insert->bind_param('iiss', $student_id, $tutor_id, $subject, $date);
+    $stmt_insert->bind_param('iiiss', $student_id, $tutor_id,$class_id ,$subject, $date);
 
     if ($stmt_insert->execute()) {
         $message = 'Request submitted successfully!';
@@ -207,6 +208,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="field">
                         <label for="subject">Subject:</label>
                         <input type="text" id="subject" name="subject" required>
+                    </div>
+                    <div class="field">
+                        <label for="classID">Class ID:</label>
+                        <input type="text" id="class_id" name="class_id" required>
                     </div>
                     <div class="field">
                         <label for="date">Date:</label>

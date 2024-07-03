@@ -28,8 +28,13 @@ $search_results = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
     $search_term = '%' . $_POST['search'] . '%'; // Adding wildcard for partial matching
 
-    // Query to find tutors teaching the subject matching the search term
-    $sql_tutors = "SELECT * FROM tutors WHERE subject LIKE ?";
+    // Query to find tutors teaching the subject matching the search term and join with class table
+    $sql_tutors = "
+        SELECT t.*, c.class_id, c.class_name 
+        FROM tutors t
+        LEFT JOIN class c ON t.tutor_id = c.tutor_id
+        WHERE t.subject LIKE ?
+    ";
     $stmt_tutors = $connection->prepare($sql_tutors);
     $stmt_tutors->bind_param('s', $search_term);
     $stmt_tutors->execute();
@@ -202,6 +207,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
 <body>
     <div class="header">
         <img src="logo.png" alt="Logo">
+        <div>
+            <a href="studentDashboard.php">Homepage</a>
+            <a href="classes.php">Classes</a>
+            <a href="RequestTutor.php">Request Tutor</a>
+            <a href="../login.php">Logout</a>
+        </div>
     </div>
     <div class="main">
         <div class="content">
@@ -251,6 +262,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
                                     <strong>Last Name:</strong> <?php echo htmlspecialchars($result['last_name']); ?><br>
                                     <strong>Subject:</strong> <?php echo htmlspecialchars($result['subject']); ?><br>
                                     <strong>Email:</strong> <?php echo htmlspecialchars($result['email']); ?><br>
+                                    <strong>Class ID:</strong> <?php echo htmlspecialchars($result['class_id']); ?><br>
+                                    <strong>Class Name:</strong> <?php echo htmlspecialchars($result['class_name']); ?><br>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
@@ -260,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
         </div>
     </div>
     <footer>
-        <p>TutorPal, Copyright &copy; <?php echo date('d,m,Y'); ?></p>
+        <p>TutorPal, Copyright &copy; <?php echo date('Y'); ?></p>
     </footer>
 </body>
 </html>

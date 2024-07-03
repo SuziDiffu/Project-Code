@@ -40,9 +40,13 @@ $students = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $class_id = $_POST['class_id'];
 
-    $sql_students = "SELECT student_id, first_name, last_name, email FROM students WHERE class_id = ?";
+    $sql_students = "SELECT s.student_id, s.first_name, s.last_name, s.email, s.grade 
+                     FROM students s 
+                     JOIN requests r ON s.student_id = r.student_id 
+                     JOIN class c ON r.class_id = c.class_id
+                     WHERE c.class_id = ? AND c.tutor_id = ? AND r.status = 'accepted'";
     $stmt_students = $connection->prepare($sql_students);
-    $stmt_students->bind_param('i', $class_id);
+    $stmt_students->bind_param('ii', $class_id, $tutor_id);
     $stmt_students->execute();
     $result_students = $stmt_students->get_result();
 
@@ -214,6 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
+                            <th>Grade</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -223,6 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <td><?php echo htmlspecialchars($student['first_name']); ?></td>
                                 <td><?php echo htmlspecialchars($student['last_name']); ?></td>
                                 <td><?php echo htmlspecialchars($student['email']); ?></td>
+                                <td><?php echo htmlspecialchars($student['grade']); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
