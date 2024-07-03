@@ -232,7 +232,7 @@ $result_requests = $stmt_requests->get_result();
         </div>
     </div>
     <footer>
-        <p>TutorPal, Copyright &copy; <?php echo date('Y'); ?></p>
+        <p>TutorPal, Copyright &copy; <?php echo date('d,m,Y'); ?></p>
     </footer>
 </body>
 </html>

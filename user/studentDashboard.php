@@ -273,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
         </div>
     </div>
     <footer>
-        <p>TutorPal, Copyright &copy; <?php echo date('Y'); ?></p>
+        <p>TutorPal, Copyright &copy; <?php echo date('d,m,Y'); ?></p>
     </footer>
 </body>
 </html>
