@@ -209,8 +209,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
         <img src="logo.png" alt="Logo">
         <div>
             <a href="studentDashboard.php">Homepage</a>
-            <a href="classes.php">Classes</a>
-            <a href="RequestTutor.php">Request Tutor</a>
             <a href="../login.php">Logout</a>
         </div>
     </div>
@@ -220,6 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
                 <a href="studentDashboard.php">Homepage</a>
                 <a href="classes.php">Classes</a>
                 <a href="RequestTutor.php">Request Tutor</a>
+                <a href="viewMarks.php">View Marks</a>
                 <a href="../login.php">Logout</a>
             </div>
             <div class="profile-container">
