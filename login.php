@@ -27,9 +27,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt_student->execute();
     $result_student = $stmt_student->get_result();
 
+    // 4. Prepare and Execute SQL Query for Admins
+    $sql_admin = "SELECT * FROM admin WHERE email = ?";
+    $stmt_admin = $connection->prepare($sql_admin);
+    $stmt_admin->bind_param('s', $email);
+    $stmt_admin->execute();
+    $result_admin = $stmt_admin->get_result();
+
     if ($result_tutor->num_rows > 0) {
         $user = $result_tutor->fetch_assoc();
-        if (password_verify($password, $user['password'])) {
+        if (password_verify($password, $user['password'])) /*password_verify hashes password*/{
             $_SESSION['user_id'] = $user['tutor_id'];
             $_SESSION['user_role'] = 'tutor';
             header("Location: user/teacherDashboard.php");
@@ -43,6 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_id'] = $user['student_id'];
             $_SESSION['user_role'] = 'student';
             header("Location: user/studentDashboard.php");
+            exit;
+        } else {
+            echo "Invalid email or password";
+        }
+    } elseif ($result_admin->num_rows > 0) {
+        $user = $result_admin->fetch_assoc();
+        if ($password === $user['password']) {
+            $_SESSION['user_id'] = $user['admin_id'];
+            $_SESSION['user_role'] = 'admin';
+            header("Location: user/admin.php");
             exit;
         } else {
             echo "Invalid email or password";
