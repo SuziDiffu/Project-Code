@@ -38,10 +38,10 @@ if ($result->num_rows > 0) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $class_id = $_POST['class_id'];
 
-    $sql = "SELECT s.first_name, s.last_name, a.title, sw.file_path, sw.submitted_date
-            FROM submitted_work sw
-            JOIN assignments a ON sw.assignment_id = a.assignment_id
-            JOIN students s ON sw.student_id = s.student_id
+    $sql = "SELECT s.first_name, s.last_name, a.title, sb.file_path
+            FROM submissions sb
+            JOIN assignments a ON sb.assignment_id = a.assignment_id
+            JOIN students s ON sb.student_id = s.student_id
             WHERE a.class_id = ?";
     $stmt = $connection->prepare($sql);
     $stmt->bind_param('i', $class_id);
