@@ -155,6 +155,7 @@ if ($result->num_rows > 0) {
             <div class="button-group">
                 <a href="teacherDashboard.php">Homepage</a>
                 <a href="postAssignment.php">Post Assignment</a>
+                <a href="session.php">Submit Session Details</a>
                 <a href="viewSubmittedWork.php">View Submitted Work</a>
                 <a href="viewStudentRecords.php">View Student Records</a>
                 <a href="postMarks.php">Post Marks</a>

@@ -221,6 +221,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
                 <a href="viewAssignment.php">View Assignment</a>
                 <a href="submitAssignment.php">Submit Assignment</a>
                 <a href="viewMarks.php">View Marks</a>
+                <a href="payment.php">Submit Payment Details</a>
+                <a href="giveFeedback.php">Give Feedback</a>
                 <a href="../login.php">Logout</a>
             </div>
             <div class="profile-container">
