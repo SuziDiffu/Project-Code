@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payment_id']) && isse
     <div class="header">
         <img src="logo.png" alt="Logo">
         <div class="button-group">
-            <a href="tutorDashboard.php">Back to Tutor Dashboard</a>
+            <a href="teacherDashboard.php">Back to Tutor Dashboard</a>
             <a href="../login.php">Logout</a>
         </div>
     </div>
