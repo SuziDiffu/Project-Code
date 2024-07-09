@@ -15,6 +15,7 @@ $db = new Database();
 $connection = $db->connection; // Access the database connection
 
 // Handle form submission
+$success_message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $student_id = $_POST['student_id'];
     $tutor_id = $_POST['tutor_id'];
@@ -28,9 +29,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt_insert->execute();
     $stmt_insert->close();
 
-    // Redirect to the same page after submission to avoid form resubmission
-    header("Location: session.php");
+    // Redirect to the same page with a success query parameter
+    header("Location: session.php?success=1");
     exit;
+}
+
+// Check for success query parameter
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    $success_message = 'Session details submitted successfully.';
 }
 ?>
 
@@ -117,6 +123,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         button:hover {
             background-color: #168aad;
         }
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
         footer {
             background-color: #1bafd4;
             color: white;
@@ -138,6 +152,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="main">
         <div class="content">
             <h1>Submit Session Details</h1>
+            <?php if ($success_message): ?>
+                <div class="success-message"><?php echo $success_message; ?></div>
+            <?php endif; ?>
             <form method="POST" action="session.php">
                 <label for="student_id">Student ID:</label>
                 <input type="number" id="student_id" name="student_id" required>
