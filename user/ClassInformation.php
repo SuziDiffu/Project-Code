@@ -156,9 +156,12 @@ if ($result->num_rows > 0) {
                 <a href="teacherDashboard.php">Homepage</a>
                 <a href="postAssignment.php">Post Assignment</a>
                 <a href="session.php">Submit Session Details</a>
+                <a href="paymentDetails.php">Payment Details</a>
                 <a href="viewSubmittedWork.php">View Submitted Work</a>
                 <a href="viewStudentRecords.php">View Student Records</a>
                 <a href="postMarks.php">Post Marks</a>
+                <a href="paymentDetails.php">Payment Details</a>
+                <a href="feedback.php">View Feedback</a>
                 <a href="../login.php">Logout</a>
             </div>
             <div class="table-container">
