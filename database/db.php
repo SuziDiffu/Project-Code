@@ -45,7 +45,7 @@ class Database{
         //check for errors
      }catch(Exp $e){
         echo "Something went wrong";//what  user sees
-        //logging (for you as developer)
+        //logging (for  developer)
         var_dump($e->getMessage());
     }
     }
@@ -54,7 +54,7 @@ class Database{
 //creating an object of type of database
 //$db=new Database();
 
-//how do we access db connection
-//ar_dump($db->connection);
+//how to  access db connection
+//var_dump($db->connection);
 
 
