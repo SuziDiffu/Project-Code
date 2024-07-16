@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +9,8 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            background: url('background.png') no-repeat center center fixed;
+            background-size: cover;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -57,6 +57,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Added background color for better text visibility */
         }
         .about {
             background-color: white;
@@ -115,6 +116,33 @@
             width: 100%;
             box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
         }
+        .hero {
+            background: url('landing.png') no-repeat center center;
+            background-size: cover;
+            width: 100%;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .features img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -128,6 +156,9 @@
                 <img src="email_icon.png" alt="Email"> infotutorpal@gmail.com
             </a>
         </div>
+    </div>
+    <div class="hero">
+        <h1>Welcome to TutorPal</h1>
     </div>
     <div class="main">
         <div class="about">
@@ -150,6 +181,10 @@
                 <a href="studentRegistration.php" class="button">Student Registration</a>
                 <a href="teacherRegistration.php" class="button">Teacher Registration</a>
             </div>
+        </div>
+        <div class="features">
+            <img src="landing2.png" alt="Feature 1">
+            <img src="landing2.png" alt="Feature 2">
         </div>
     </div>
     <footer>

@@ -84,7 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background: #f0f0f0;
+            background: url('background.png') no-repeat center center fixed;
+            background-size: cover;
         }
         .header {
             width: 100%;
@@ -120,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             width: 100%;
             padding: 20px;
             box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.8); /* Added background color for better text visibility */
         }
         h1 {
             margin: 10px 0;

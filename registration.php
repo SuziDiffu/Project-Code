@@ -12,7 +12,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: #f0f0f0;
+            background: url('background.png') no-repeat center center fixed;
+            background-size: cover;
             min-height: 100vh;
         }
         .header {
@@ -48,6 +49,7 @@
             justify-content: center;
             width: 100%;
             padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Added background color for better text visibility */
         }
         h1, h4 {
             margin: 10px 0;
