@@ -137,12 +137,6 @@
             gap: 20px;
             margin: 20px 0;
         }
-        .features img {
-            width: 100%;
-            max-width: 300px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
     </style>
 </head>
 <body>
@@ -183,8 +177,7 @@
             </div>
         </div>
         <div class="features">
-            <img src="landing2.png" alt="Feature 1">
-            <img src="landing2.png" alt="Feature 2">
+            <!-- Images removed -->
         </div>
     </div>
     <footer>
