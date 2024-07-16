@@ -172,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="content">
             <div class="button-group">
                 <a href="teacherDashboard.php">Homepage</a>
-                <a href="../logout.php">Logout</a>
+                <a href="../login.php">Logout</a>
             </div>
             <div class="form-container">
                 <h1>Create Class</h1>
